@@ -1,0 +1,26 @@
+{
+  "name": "refolk-server",
+  "version": "1.0.0",
+  "description": ":wrench: Scripts and files used to create a mantain the Refolk! server",
+  "main": "index.mjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/serverhiccups/refolk-server.git"
+  },
+  "author": "serverhiccups",
+  "license": "CC-BY-SA-4.0",
+  "bugs": {
+    "url": "https://github.com/serverhiccups/refolk-server/issues"
+  },
+  "homepage": "https://github.com/serverhiccups/refolk-server#readme",
+  "dependencies": {
+    "fast-xml-parser": "^3.20.0",
+    "html-entities": "^2.3.2",
+    "node-fetch": "^3.0.0",
+    "typesense": "^0.14.0",
+    "yargs": "^17.1.1"
+  }
+}
