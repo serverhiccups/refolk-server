@@ -25,11 +25,11 @@ let xmlPaths = [
 let client = new Typesense.Client({
 	'nodes': [{
 		'host': 'localhost',
-		'port': '8108',
+		'port': '80',
 		'protocol': 'http'
 	}],
 	'apiKey': String(masterKey),
-	"connectionTimeoutSeconds": 10
+	"connectionTimeoutSeconds": 60
 })
 
 await Promise.all((await client.keys().retrieve()).keys.map(async (k) => {
@@ -43,8 +43,8 @@ let searchOnlyKey = await client.keys().create({
 })
 
 let websiteKey = await client.keys().generateScopedSearchKey(searchOnlyKey.value, {
-	'query_by': 'key, translation, inflection, definition, idioms, idiomsTranslation',
-	'query_by_weights': '10, 8, 6, 6, 5, 5',
+	'query_by': 'key, translation, inflection, definition, synonyms, idioms, idiomsTranslation',
+	'query_by_weights': '10, 8, 6, 6, 6, 4, 4',
 	'limit_hits': 50,
 	'per_page': 50
 })
@@ -95,6 +95,11 @@ let schema = {
 			"name": "idiomsTranslation",
 			"type": "string[]",
 			"facet": true
+		},
+		{
+			"name": "synonyms",
+			"type": "string[]",
+			"facet": true
 		}
 	]
 }
@@ -141,7 +146,10 @@ function parseEntry(el) {
 		}) : [dd(el.idiom?.translation?.attr["@_value"])] : [],
 		inflection: el.paradigm?.inflection ? !el.paradigm.inflection?.attr ? el.paradigm.inflection.map((i) => {
 			return i.attr["@_value"];
-		}) : [el.paradigm.inflection.attr["@_value"]] : []
+		}) : [el.paradigm.inflection.attr["@_value"]] : [],
+		synonyms: el.synonym ? el.synonym?.attr == undefined ? el.synonym?.map((s) => {
+			return s.attr["@_value"]
+		}) : [el.synonym?.attr["@_value"]] : []
 	}
 }
 
